@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Résultat</title>
+    <link href="index.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #fff3e0;
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            color: #d84315;
+            font-size: 2em;
+        }
+
+        p {
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+<h1>Résultat du quizz</h1>
+<p id="resultat"></p>
+
+<script>
+    const score = localStorage.getItem("scoreQuizz");
+    const max = 5;
+    const message = document.getElementById("resultat");
+
+    if (score === null) {
+        message.textContent = "Aucune réponse enregistrée 😕.";
+    } else {
+        const n = Number(score);
+        if (n === max) {
+            message.textContent = "🌟 Parfait ! On est compatibles à 100% !";
+        } else if (n >= 3) {
+            message.textContent = `👍 Pas mal du tout ! Compatibilité : ${n}/${max}`;
+        } else {
+            message.textContent = `😅 Oups... seulement ${n}/${max}. On va dire qu’on est complémentaires !`;
+        }
+    }
+</script>
+</body>
+</html>

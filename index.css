@@ -1,0 +1,94 @@
+/* === GLOBAL === */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #ffecd2, #fcb69f);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    animation: fadeIn 1s ease-in;
+}
+
+/* === CONTAINER === */
+.container {
+    background: #fff3e0;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    animation: float 3s ease-in-out infinite;
+    max-width: 600px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* === TITRE === */
+.title {
+    font-size: 1.8rem;
+    color: #d84315;
+    margin-bottom: 2rem;
+}
+
+/* === BOUTONS === */
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.btn {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    min-width: 120px;
+    text-align: center;
+    flex: 1 1 40%;
+    max-width: 200px;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+}
+
+.btn-oui {
+    background-color: #ff7043;
+    color: white;
+}
+
+.btn-non {
+    background-color: #ffe0b2;
+    color: #bf360c;
+}
+
+/* === ANIMATIONS === */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 480px) {
+    .title {
+        font-size: 1.5rem;
+    }
+
+    .btn {
+        font-size: 0.95rem;
+        padding: 0.8rem 1.2rem;
+    }
+
+    .container {
+        padding: 1.5rem;
+    }
+}
