@@ -36,11 +36,13 @@
     } else {
         const n = Number(score);
         if (n === max) {
-            message.textContent = "🌟 Parfait ! On est compatibles à 100% !";
-        } else if (n >= 3) {
-            message.textContent = `👍 Pas mal du tout ! Compatibilité : ${n}/${max}`;
+            message.textContent = "5/5 Suspect on dirait que tu m'espionnes à ce stade";
+        } else if (n === 4) {
+            message.textContent = `4 comme à 4 pattes : ${n}/${max}`;
+        } else if (n === 3) {
+            message.textContent = `3/5 y'a sûrement un bug t'aurais dû avoir 5/5 `;
         } else {
-            message.textContent = `😅 Oups... seulement ${n}/${max}. On va dire qu’on est complémentaires !`;
+            message.textContent = `😅 Oups... seulement ${n}/${max}. T'inquiètes tu pourras me manipuler pour me faire changer !`;
         }
     }
 </script>
