@@ -424,7 +424,7 @@
         const n = Number(score);
         scoreEl.textContent = `${n}/${max}`;
 
-        if (n === max) {
+        if (n > 1) {
             messageEl.textContent = "🎉 6/6 Suspect on dirait que tu m'espionnes à ce stade ! 🕵️‍♀️";
             scoreEl.className = "score-display score-perfect";
             createConfetti();
@@ -432,21 +432,6 @@
             setTimeout(() => createCelebrationEmoji('🎉'), 500);
             setTimeout(() => createCelebrationEmoji('🥳'), 1000);
             setTimeout(() => createCelebrationEmoji('✨'), 1500);
-        } else if (n === 5) {
-            messageEl.textContent = `🏆 5/6 Presque parfait ! Tu me connais vraiment bien ! 💕`;
-            scoreEl.className = "score-display score-perfect";
-            createConfetti();
-            setTimeout(() => createCelebrationEmoji('🏆'), 500);
-            setTimeout(() => createCelebrationEmoji('💕'), 1000);
-        } else if (n === 4) {
-            messageEl.textContent = `🐕 4/6 Comme à 4 pattes... mais c'est déjà très bien ! 😉`;
-            scoreEl.className = "score-display score-good";
-            setTimeout(() => createCelebrationEmoji('🐕'), 500);
-            setTimeout(() => createCelebrationEmoji('😊'), 1000);
-        } else if (n === 3) {
-            messageEl.textContent = `🤔 3/6 Y'a sûrement un bug, t'aurais dû avoir 6/6 ! 😏`;
-            scoreEl.className = "score-display score-okay";
-            setTimeout(() => createCelebrationEmoji('🤔'), 500);
         } else {
             messageEl.textContent = `😅 Oups... seulement ${n}/${max}. T'inquiètes tu pourras me manipuler pour me faire changer ! 😘`;
             scoreEl.className = "score-display score-low";
