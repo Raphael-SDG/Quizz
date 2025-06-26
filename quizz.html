@@ -2,133 +2,212 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Quizz de compatibilité</title>
     <style>
         * {
             box-sizing: border-box;
         }
 
-        html, body {
+        body {
             margin: 0;
-            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite, fadeIn 1.2s ease-in;
             min-height: 100vh;
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #fff3e0;
+            padding: 20px;
+            position: relative;
             overflow-x: hidden;
-            overflow-y: auto;
         }
 
-        /* Conteneur principal */
-        #main-container {
+        /* Particules flottantes en arrière-plan */
+        body::before {
+            content: '💕 💖 💘 💝 💗 ✨ 🌟 ⭐ 💫 🎀';
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 20px 15px;
-            min-height: 100vh;
+            height: 100%;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: floatingHearts 20s linear infinite;
+            pointer-events: none;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
-        /* Titre */
+        #main-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
         h1 {
-            text-align: center;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
             color: #d84315;
-            font-size: 1.8rem;
-            margin-bottom: 30px;
-            word-break: break-word;
-            padding: 0 10px;
+            text-align: center;
+            margin-bottom: 40px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            line-height: 1.3;
+            animation: heartbeat 2s ease-in-out infinite;
         }
 
         /* Bloc de question */
         fieldset {
-            border: 2px solid #ff7043;
-            margin-bottom: 25px;
-            background: #ffe0b2;
-            padding: 20px 15px;
-            border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-            word-wrap: break-word;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 20px;
+            padding: 30px 25px;
+            margin-bottom: 30px;
+            box-shadow:
+                    0 20px 40px rgba(0, 0, 0, 0.1),
+                    0 0 0 1px rgba(255, 255, 255, 0.2);
+            animation: float 4s ease-in-out infinite;
             position: relative;
         }
 
+        fieldset:nth-child(even) {
+            animation-delay: -2s;
+        }
+
         legend {
-            font-weight: bold;
-            font-size: 1.1em;
-            color: #e64a19;
-            padding: 0 10px;
-            background-color: #fff3e0;
-            border-radius: 8px;
-            word-break: break-word;
-            line-height: 1.4;
+            font-weight: 700;
+            font-size: 1.2em;
+            color: #d84315;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #ff7043, #ff5722);
+            color: white;
+            border-radius: 25px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 15px rgba(255, 112, 67, 0.4);
+            position: relative;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
         /* Options */
         .option-group {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-top: 15px;
+            gap: 15px;
+            margin-top: 20px;
         }
 
         .option {
             display: flex;
             align-items: center;
-            background-color: #fff3e0;
-            padding: 15px;
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 18px 20px;
+            border-radius: 15px;
             cursor: pointer;
             border: 2px solid transparent;
-            transition: all 0.3s ease;
-            word-break: break-word;
-            min-height: 50px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .option:hover::before {
+            left: 100%;
         }
 
         .option:hover {
-            background-color: #ffe0b2;
+            transform: translateY(-2px) scale(1.01);
+            background: rgba(255, 224, 178, 0.9);
             border-color: #fb8c00;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
 
         .option input[type="radio"] {
-            margin-right: 12px;
+            margin-right: 15px;
             width: 20px;
             height: 20px;
             cursor: pointer;
+            accent-color: #ff7043;
         }
 
         .option span {
             font-size: 1rem;
             color: #5d4037;
-            word-break: break-word;
             line-height: 1.4;
             flex: 1;
+            font-weight: 500;
         }
 
         .option:has(input[type="radio"]:checked) {
-            background-color: #fb8c00;
-            border-color: #f57c00;
+            background: linear-gradient(135deg, #ff7043, #ff5722);
+            border-color: #f4511e;
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(255, 112, 67, 0.4);
         }
 
         .option:has(input[type="radio"]:checked) span {
             color: white;
-            font-weight: 500;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         }
 
         /* Bouton */
         button {
-            background-color: #ff7043;
-            color: white;
-            padding: 15px 20px;
-            font-size: 1.1rem;
+            padding: 18px 35px;
+            font-size: 1.2rem;
             border: none;
-            border-radius: 10px;
+            border-radius: 50px;
             cursor: pointer;
-            display: block;
-            margin: 40px auto 30px;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
             width: 100%;
             max-width: 300px;
+            margin: 40px auto 30px;
+            display: block;
+            background: linear-gradient(135deg, #ff7043, #ff5722);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 112, 67, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
         }
 
         button:hover {
-            background-color: #f4511e;
+            background: linear-gradient(135deg, #ff5722, #f4511e);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(255, 112, 67, 0.6);
+        }
+
+        button:active {
+            transform: translateY(0) scale(0.98);
         }
 
         /* Toasts */
@@ -147,54 +226,136 @@
         }
 
         .toast {
-            background-color: #ff7043;
+            background: linear-gradient(135deg, #ff7043, #ff5722);
             color: white;
             padding: 20px 30px;
-            border-radius: 12px;
+            border-radius: 20px;
             font-size: 1.1rem;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(255, 112, 67, 0.4);
             opacity: 0;
             animation: fadeInOut 10s ease forwards;
             text-align: center;
-            word-wrap: break-word;
             max-width: 100%;
             min-height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: 500;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Emojis flottants */
+        .floating-emoji {
+            position: absolute;
+            font-size: 2rem;
+            animation: floatUp 4s ease-out infinite;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-10px) rotate(0.5deg); }
+            66% { transform: translateY(-5px) rotate(-0.5deg); }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 4px 15px rgba(255, 112, 67, 0.4); }
+            50% { box-shadow: 0 4px 25px rgba(255, 112, 67, 0.8); }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes floatingHearts {
+            0% { transform: translateX(-100%) rotate(0deg); }
+            100% { transform: translateX(100vw) rotate(360deg); }
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) rotate(180deg);
+            }
         }
 
         @keyframes fadeInOut {
-            0%   { opacity: 0; transform: translateY(20px); }
-            10%  { opacity: 1; transform: translateY(0); }
+            0%   { opacity: 0; transform: translateY(20px) scale(0.9); }
+            10%  { opacity: 1; transform: translateY(0) scale(1); }
             90%  { opacity: 1; }
-            100% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 0; transform: translateY(20px) scale(0.9); }
         }
 
-        /* Styles pour mobile */
+        /* Effet de particules au clic */
+        .click-effect {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff7043;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: explode 0.6s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                opacity: 1;
+                transform: scale(0);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(4);
+            }
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             #main-container {
-                padding: 15px 10px;
+                padding: 0 10px;
             }
 
             h1 {
-                font-size: 1.6rem;
-                margin-bottom: 25px;
+                margin-bottom: 30px;
             }
 
             fieldset {
-                padding: 15px 12px;
-                margin-bottom: 20px;
+                padding: 25px 20px;
+                margin-bottom: 25px;
             }
 
             legend {
-                font-size: 1rem;
-                padding: 0 8px;
+                font-size: 1.1em;
+                padding: 8px 16px;
             }
 
             .option {
-                padding: 12px;
-                min-height: 45px;
+                padding: 15px 18px;
+                min-height: 55px;
             }
 
             .option span {
@@ -202,8 +363,8 @@
             }
 
             button {
-                padding: 12px 20px;
-                font-size: 1rem;
+                padding: 15px 30px;
+                font-size: 1.1rem;
                 margin: 30px auto 20px;
             }
 
@@ -214,36 +375,34 @@
             }
         }
 
-        /* Styles pour très petits écrans */
         @media (max-width: 480px) {
-            #main-container {
-                padding: 10px 8px;
-            }
-
-            h1 {
-                font-size: 1.4rem;
-            }
-
             fieldset {
-                padding: 12px 10px;
+                padding: 20px 15px;
             }
 
             legend {
-                font-size: 0.95rem;
+                font-size: 1rem;
+                padding: 6px 12px;
             }
 
             .option {
-                padding: 10px;
+                padding: 12px 15px;
+                min-height: 50px;
             }
 
             .option input[type="radio"] {
                 width: 18px;
                 height: 18px;
-                margin-right: 10px;
+                margin-right: 12px;
             }
 
             .option span {
                 font-size: 0.9rem;
+            }
+
+            button {
+                padding: 12px 25px;
+                font-size: 1rem;
             }
         }
     </style>
@@ -263,7 +422,7 @@
         </fieldset>
 
         <fieldset>
-            <legend>2. Si tu devrais emmener un objet sur une île déserte ce serait quoi ? </legend>
+            <legend>2. Si tu devrais emmener un objet sur une île déserte ce serait quoi ?</legend>
             <div class="option-group">
                 <label class="option"><input type="radio" name="q2" value="a"><span>Moi</span></label>
                 <label class="option"><input type="radio" name="q2" value="b"><span>Un pot d'El Mordjene de 1kg</span></label>
@@ -325,9 +484,40 @@
         q1: { b: "Tu sais ce que ça veut dire au moins ou t'es juste un peu raciste" },
         q2: { a: "Merci mais tu m'objectifies un peu là" },
         q3: { c: "T'aurais pu mettre chien directement #NotAllMenButALwaysMen" },
-        q4: { c: "Dédicace à ma Niacinamide et ma Vitanime C" },
+        q4: { c: "Dédicace à ma Niacinamide et ma Vitamine C" },
         q6: { a: "En gros c'est quand un mec t'explique un truc alors que tu le sais déjà comme là par exemple" }
     };
+
+    // Effet de particules au clic
+    function createClickEffect(e) {
+        const effect = document.createElement('div');
+        effect.className = 'click-effect';
+        effect.style.left = e.clientX + 'px';
+        effect.style.top = e.clientY + 'px';
+        document.body.appendChild(effect);
+
+        setTimeout(() => {
+            effect.remove();
+        }, 600);
+    }
+
+    // Emojis flottants
+    function createFloatingEmoji() {
+        const emojis = ['💕', '💖', '💘', '✨', '🌟', '💫', '🎀', '🦋'];
+        const emoji = document.createElement('div');
+        emoji.className = 'floating-emoji';
+        emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        emoji.style.left = Math.random() * 100 + '%';
+        emoji.style.animationDelay = Math.random() * 2 + 's';
+        document.body.appendChild(emoji);
+
+        setTimeout(() => {
+            emoji.remove();
+        }, 4000);
+    }
+
+    // Créer des emojis flottants périodiquement
+    setInterval(createFloatingEmoji, 2000);
 
     function showToast(message) {
         const container = document.getElementById("toast-container");
@@ -344,6 +534,7 @@
 
     document.querySelectorAll('input[type="radio"]').forEach(radio => {
         radio.addEventListener("click", (e) => {
+            createClickEffect(e);
             const name = e.target.name;
             const value = e.target.value;
 
@@ -353,8 +544,16 @@
         });
     });
 
+    // Effet au survol des options
+    document.querySelectorAll('.option').forEach(option => {
+        option.addEventListener('mouseenter', () => {
+            createFloatingEmoji();
+        });
+    });
+
     document.getElementById("quizzForm").addEventListener("submit", function(e) {
         e.preventDefault();
+        createClickEffect(e);
 
         const questions = Object.keys(reponsesCorrectes);
         let score = 0;
@@ -370,7 +569,7 @@
         });
 
         if (!allAnswered) {
-            alert("Merci de répondre à toutes les questions !");
+            showToast("Merci de répondre à toutes les questions ! 💕");
             return;
         }
 
@@ -380,9 +579,15 @@
             }
         });
 
-        // Stockage temporaire du score (remplace localStorage)
-        sessionStorage.setItem("scoreQuizz", score);
-        window.location.href = "resultat.html";
+        // Animation de succès
+        const button = e.target.querySelector('button');
+        button.style.transform = 'scale(1.1)';
+        setTimeout(() => {
+            button.style.transform = '';
+            // Stockage temporaire du score
+            sessionStorage.setItem("scoreQuizz", score);
+            window.location.href = "resultat.html";
+        }, 200);
     });
 </script>
 <div id="toast-container"></div>

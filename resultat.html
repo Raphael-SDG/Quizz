@@ -2,49 +2,469 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Résultat</title>
-    <link href="index.css" rel="stylesheet">
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #fff3e0;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite, fadeIn 1.2s ease-in;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Particules flottantes en arrière-plan */
+        body::before {
+            content: '💕 💖 💘 💝 💗 ✨ 🌟 ⭐ 💫 🎀';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: floatingHearts 20s linear infinite;
+            pointer-events: none;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .container {
             text-align: center;
-            padding: 50px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 60px 50px;
+            border-radius: 25px;
+            box-shadow:
+                    0 20px 40px rgba(0, 0, 0, 0.1),
+                    0 0 0 1px rgba(255, 255, 255, 0.2);
+            animation: float 4s ease-in-out infinite;
+            max-width: 90vw;
+            width: 100%;
+            max-width: 700px;
+            position: relative;
+            z-index: 1;
         }
 
-        h1 {
+        .title {
+            font-size: clamp(1.8rem, 5vw, 3rem);
             color: #d84315;
-            font-size: 2em;
+            margin-bottom: 30px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            line-height: 1.3;
+            animation: heartbeat 2s ease-in-out infinite;
         }
 
-        p {
-            font-size: 1.5em;
+        .score-display {
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 800;
+            margin: 30px 0;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .score-perfect {
+            background: linear-gradient(135deg, #ff7043, #ff5722);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .score-good {
+            background: linear-gradient(135deg, #fb8c00, #f57c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .score-okay {
+            background: linear-gradient(135deg, #ffa726, #ff9800);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .score-low {
+            background: linear-gradient(135deg, #ffb74d, #ffcc02);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-message {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: #bf360c;
+            margin: 40px 0;
+            font-weight: 500;
+            line-height: 1.4;
+            opacity: 0.9;
+            padding: 25px;
+            background: rgba(255, 224, 178, 0.3);
+            border-radius: 20px;
+            border: 2px solid rgba(255, 112, 67, 0.2);
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 18px 35px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            min-width: 250px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .btn-retry {
+            background: linear-gradient(135deg, #ff7043, #ff5722);
+            color: white;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .btn-retry:hover {
+            background: linear-gradient(135deg, #ff5722, #f4511e);
+        }
+
+        .btn-home {
+            background: linear-gradient(135deg, #ffe0b2, #ffcc02);
+            color: #bf360c;
+        }
+
+        .btn-home:hover {
+            background: linear-gradient(135deg, #ffcc02, #ffa000);
+        }
+
+        /* Emojis flottants spéciaux pour les résultats */
+        .celebration-emoji {
+            position: absolute;
+            font-size: 3rem;
+            animation: celebrate 3s ease-out infinite;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        /* Confettis pour les bons scores */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff7043;
+            animation: confetti-fall 3s ease-out infinite;
+        }
+
+        .confetti:nth-child(odd) {
+            background: #ffcc02;
+            animation-delay: -0.5s;
+        }
+
+        .confetti:nth-child(3n) {
+            background: #ff9a9e;
+            animation-delay: -1s;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-15px) rotate(1deg); }
+            66% { transform: translateY(-5px) rotate(-1deg); }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            25% { transform: translateY(-10px) scale(1.05); }
+            50% { transform: translateY(-5px) scale(1); }
+            75% { transform: translateY(-2px) scale(1.02); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 4px 15px rgba(255, 112, 67, 0.4); }
+            50% { box-shadow: 0 4px 25px rgba(255, 112, 67, 0.8); }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes floatingHearts {
+            0% { transform: translateX(-100%) rotate(0deg); }
+            100% { transform: translateX(100vw) rotate(360deg); }
+        }
+
+        @keyframes celebrate {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg) scale(0);
+            }
+            25% {
+                opacity: 1;
+                transform: translateY(-30px) rotate(90deg) scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(-60px) rotate(180deg) scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-120px) rotate(360deg) scale(0);
+            }
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                opacity: 1;
+                transform: translateY(-100px) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+
+        /* Effet de particules au clic */
+        .click-effect {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff7043;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: explode 0.6s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                opacity: 1;
+                transform: scale(0);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(4);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 30px;
+                margin: 10px;
+            }
+
+            .result-message {
+                padding: 20px;
+                margin: 30px 0;
+            }
+
+            .btn {
+                padding: 15px 25px;
+                font-size: 1rem;
+                min-width: 200px;
+            }
+
+            .buttons {
+                gap: 15px;
+                margin-top: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .btn {
+                min-width: 180px;
+                padding: 12px 20px;
+            }
+
+            .result-message {
+                padding: 15px;
+            }
         }
     </style>
 </head>
 <body>
-<h1>Résultat du quizz</h1>
-<p id="resultat"></p>
+<div class="container">
+    <h1 class="title">💖 Résultat du quizz 💖</h1>
+    <div class="score-display" id="scoreDisplay"></div>
+    <div class="result-message" id="resultat"></div>
+
+    <div class="buttons">
+        <a href="quizz.html" class="btn btn-retry">
+            🔄 Refaire le quizz
+        </a>
+        <a href="index.html" class="btn btn-home">
+            🏠 Retour à l'accueil
+        </a>
+    </div>
+</div>
 
 <script>
-    const score = localStorage.getItem("scoreQuizz");
-    const max = 5;
-    const message = document.getElementById("resultat");
+    // Effet de particules au clic
+    function createClickEffect(e) {
+        const effect = document.createElement('div');
+        effect.className = 'click-effect';
+        effect.style.left = e.clientX + 'px';
+        effect.style.top = e.clientY + 'px';
+        document.body.appendChild(effect);
 
-    if (score === null) {
-        message.textContent = "Aucune réponse enregistrée 😕.";
-    } else {
-        const n = Number(score);
-        if (n === max) {
-            message.textContent = "5/5 Suspect on dirait que tu m'espionnes à ce stade";
-        } else if (n === 4) {
-            message.textContent = `4 comme à 4 pattes : ${n}/${max}`;
-        } else if (n === 3) {
-            message.textContent = `3/5 y'a sûrement un bug t'aurais dû avoir 5/5 `;
-        } else {
-            message.textContent = `😅 Oups... seulement ${n}/${max}. T'inquiètes tu pourras me manipuler pour me faire changer !`;
+        setTimeout(() => {
+            effect.remove();
+        }, 600);
+    }
+
+    // Emojis de célébration
+    function createCelebrationEmoji(emoji) {
+        const celebEmoji = document.createElement('div');
+        celebEmoji.className = 'celebration-emoji';
+        celebEmoji.textContent = emoji;
+        celebEmoji.style.left = Math.random() * 100 + '%';
+        celebEmoji.style.animationDelay = Math.random() * 2 + 's';
+        document.body.appendChild(celebEmoji);
+
+        setTimeout(() => {
+            celebEmoji.remove();
+        }, 3000);
+    }
+
+    // Confettis
+    function createConfetti() {
+        for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.animationDelay = Math.random() * 3 + 's';
+            document.body.appendChild(confetti);
+
+            setTimeout(() => {
+                confetti.remove();
+            }, 3000);
         }
     }
+
+    // Gestion des résultats
+    const score = sessionStorage.getItem("scoreQuizz");
+    const max = 6; // Corrigé : il y a 6 questions
+    const messageEl = document.getElementById("resultat");
+    const scoreEl = document.getElementById("scoreDisplay");
+
+    if (score === null) {
+        messageEl.textContent = "Aucune réponse enregistrée 😕";
+        scoreEl.textContent = "?/?";
+        scoreEl.className = "score-display score-low";
+    } else {
+        const n = Number(score);
+        scoreEl.textContent = `${n}/${max}`;
+
+        if (n === max) {
+            messageEl.textContent = "🎉 6/6 Suspect on dirait que tu m'espionnes à ce stade ! 🕵️‍♀️";
+            scoreEl.className = "score-display score-perfect";
+            createConfetti();
+            // Emojis de célébration pour score parfait
+            setTimeout(() => createCelebrationEmoji('🎉'), 500);
+            setTimeout(() => createCelebrationEmoji('🥳'), 1000);
+            setTimeout(() => createCelebrationEmoji('✨'), 1500);
+        } else if (n === 5) {
+            messageEl.textContent = `🏆 5/6 Presque parfait ! Tu me connais vraiment bien ! 💕`;
+            scoreEl.className = "score-display score-perfect";
+            createConfetti();
+            setTimeout(() => createCelebrationEmoji('🏆'), 500);
+            setTimeout(() => createCelebrationEmoji('💕'), 1000);
+        } else if (n === 4) {
+            messageEl.textContent = `🐕 4/6 Comme à 4 pattes... mais c'est déjà très bien ! 😉`;
+            scoreEl.className = "score-display score-good";
+            setTimeout(() => createCelebrationEmoji('🐕'), 500);
+            setTimeout(() => createCelebrationEmoji('😊'), 1000);
+        } else if (n === 3) {
+            messageEl.textContent = `🤔 3/6 Y'a sûrement un bug, t'aurais dû avoir 6/6 ! 😏`;
+            scoreEl.className = "score-display score-okay";
+            setTimeout(() => createCelebrationEmoji('🤔'), 500);
+        } else {
+            messageEl.textContent = `😅 Oups... seulement ${n}/${max}. T'inquiètes tu pourras me manipuler pour me faire changer ! 😘`;
+            scoreEl.className = "score-display score-low";
+            setTimeout(() => createCelebrationEmoji('😅'), 500);
+        }
+    }
+
+    // Effet au clic sur les boutons
+    document.querySelectorAll('.btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            createClickEffect(e);
+            // Animation de succès
+            btn.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                btn.style.transform = '';
+            }, 200);
+        });
+    });
 </script>
 </body>
 </html>
