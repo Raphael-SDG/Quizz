@@ -149,15 +149,19 @@
         .toast {
             background-color: #ff7043;
             color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            padding: 20px 30px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
             opacity: 0;
             animation: fadeInOut 10s ease forwards;
             text-align: center;
             word-wrap: break-word;
             max-width: 100%;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         @keyframes fadeInOut {
@@ -204,8 +208,9 @@
             }
 
             .toast {
-                font-size: 0.9rem;
-                padding: 10px 15px;
+                font-size: 1rem;
+                padding: 18px 25px;
+                min-height: 55px;
             }
         }
 
